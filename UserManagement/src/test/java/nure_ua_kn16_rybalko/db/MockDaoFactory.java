@@ -3,19 +3,20 @@ package nure_ua_kn16_rybalko.db;
 import com.mockobjects.dynamic.Mock;
 
 public class MockDaoFactory extends DaoFactory {
-	
-	private Mock mockUserDao;
-	
-	public MockDaoFactory() {
-		mockUserDao =new Mock(UserDAO.class);
-	}
+    private Mock mockUserDao;
+    
+    private static final Class<UserDao> MOCKED_CLASS = UserDao.class;
 
-	public Mock getMockUserDao() {
-		return  mockUserDao;
-	}
-	
-	public UserDAO getUserDao() {
-		return (UserDAO) mockUserDao.proxy();
-	}
+    public MockDaoFactory() {
+        this.mockUserDao = new Mock(MOCKED_CLASS);
+    }
 
+    public Mock getMockUserDao() {
+        return mockUserDao;
+    }
+
+    @Override
+    public UserDAO getUserDAO(){
+        return (UserDAO) mockUserDao.proxy();
+    }
 }

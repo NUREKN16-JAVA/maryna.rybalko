@@ -1,6 +1,8 @@
 package nure_ua_kn16_rybalko;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -118,21 +120,20 @@ public class User implements Serializable {
 	
 public int getAge() {
 		
-		Calendar dateOfBirth = Calendar.getInstance();
-		Calendar today = Calendar.getInstance();
-		
-		dateOfBirth.setTime(getDateOfBirth());
+	  Calendar dateOfBirthday = Calendar.getInstance();
+      dateOfBirthday.setTime(getDateOfBirth());
 
-		int age = today.get(Calendar.YEAR) - dateOfBirth.get(Calendar.YEAR);
+      Calendar today = Calendar.getInstance();
 
-		if (dateOfBirth.get(Calendar.MONTH) > today.get(Calendar.MONTH)) {
-			age--;
-		} else if (dateOfBirth.get(Calendar.MONTH) == today.get(Calendar.MONTH)) {
+      if (dateOfBirthday.after(today)) {
+          throw new IllegalArgumentException("The age can not be negative!");
+      }
 
-			if (dateOfBirth.get(Calendar.DAY_OF_MONTH) > today.get(Calendar.DAY_OF_MONTH)) {
-				age--;
-			}
-		}
-		return age;
+      DateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+      int d1 = Integer.parseInt(formatter.format(getDateOfBirth()));
+      int d2 = Integer.parseInt(formatter.format(today.getTime()));
+      int ageCounter = (d2 - d1) / 10000;
+
+      return ageCounter;
 	}
 }
